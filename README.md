@@ -5,31 +5,33 @@
 
 ## Table of Contents
   1. [Introduction](#introduction)
+  1. [Naming Conventions](#naming-conventions)
   1. [Modules](#modules)
   1. [Classes](#classes)
+  1. [Functions](#functions)
+  1. [Whitespace](#whitespace)
+  1. [Variables](#variables)
+  	1. [Hoisting](#hoisting)
+  1. [Blocks](#blocks)
   1. [Objects](#objects)
   1. [Arrays](#arrays)
   1. [Strings](#strings)
-  1. [Functions](#functions)
   1. [Properties](#properties)
-  1. [Variables](#variables)
-  1. [Hoisting](#hoisting)
-  1. [Blocks](#blocks)
-  1. [Comments](#comments)
-  1. [Whitespace](#whitespace)
-  2. [Regions](#regions)
+  2. [Conditional Expressions & Equality](#conditional-expressions--equality)
+  1. [Type Casting & Coercion](#type-casting--coercion)
+  1. [Promises](#promises)
+  1. [Events](#events)
   1. [Commas](#commas)
   1. [Semicolons](#semicolons)
-  1. [Type Casting & Coercion](#type-casting--coercion)
-  1. [Naming Conventions](#naming-conventions)
-  1. [Accessors](#accessors)
-  1. [Constructors](#constructors)
-  1. [Events](#events)
-  1. [Modules](#modules)
-  1. [jQuery](#jquery)
-  2. [Knockout](#knockout)
-  1. [Resources](#resources)
-  1. [License](#license)
+  1. [Comments](#comments)
+  	1. [Regions](#regions)
+  1. [Third Party](#third-party)
+  	1. [jQuery](#jquery)
+  	1. [Knockout](#knockout)
+  1. [Appendices](#appendices)
+  	1. [Resources](#resources)
+  	1. [License](#license)
+
 
 ## Introduction
 
@@ -51,6 +53,153 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
+
+## Naming Conventions
+
+  - Be descriptive with your naming.
+
+	```javascript
+	// bad
+	var count = add(l1, l2).length;
+
+	// good
+	var customerCount = addCustomerLists(customerList1, customerList2).length;
+	```
+
+  - Boolean property names should ask a question.
+
+	```javascript
+	// bad
+	var readOnly = false;
+
+	// good
+	var isReadOnly = false;
+	```
+
+  - Avoid single letter names. 
+
+    ```javascript
+    // bad
+    function q() {
+      
+    }
+
+    // good
+    function query() {
+      
+    }
+    ```
+
+  - Avoid acronyms as parameter names while looping. 
+
+    ```javascript
+    // bad
+    commAppCollateralJoin.filter(function (cacj) {
+		console.log(cacj);
+	});
+
+    // good
+    commAppCollateralJoin.filter(function (commitmentCollateralJoin) {
+		console.log(commitmentCollateralJoin);
+	});
+    ```
+
+  - Use camelCase when naming objects, functions, and instances.
+
+    ```javascript
+    // bad
+    var OBJEcttsssss = {};
+
+    var this_is_my_object = {};
+
+    function c() {}
+
+    var u = new user({
+      	name: 'Bob Parr'
+    });
+
+    // good
+    var thisIsMyObject = {};
+
+    function thisIsMyFunction() {}
+
+    var user = new User({
+      	name: 'Bob Parr'
+    });
+    ```
+
+  - Use PascalCase when naming constructors or classes.
+
+    ```javascript
+    // bad
+    function user(options) {
+      	this.name = options.name;
+    }
+
+    var bad = new user({
+      	name: 'nope'
+    });
+
+    // good
+    function User(options) {
+      	this.name = options.name;
+    }
+
+    var good = new User({
+      	name: 'yup'
+    });
+    ```
+
+  - Use a leading underscore `_` when naming private properties
+
+    ```javascript
+    // bad
+    this.__firstName__ = 'Panda';
+    this.firstName_ = 'Panda';
+
+    // good
+    this._firstName = 'Panda';
+    ```
+
+  - When saving a reference to `this` use `_this`.
+
+    ```javascript
+    function() {
+      var _this = this;
+
+      return function() {
+        	console.log(_this);
+      };
+    }
+    ```
+
+  - Save references to a base class as `_base`.
+
+	```javascript
+	function CollateralWidget() {
+		var _base = $.copyFunctions(Widget.call(this, name, parent, data));
+
+		// ...logic...
+	}
+	```
+
+  - Name your functions. This is helpful for stack traces.
+
+    ```javascript
+    // bad
+    var log = function(msg) {
+      	console.log(msg);
+    };
+
+    // good
+    var log = function log(msg) {
+      	console.log(msg);
+    };
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
 ## Modules
 
   - Module names should match the returned type.
@@ -58,6 +207,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
   - Modules returning classes will be upper case, while modules returning namespaces will be lower case.
 
 **[⬆ back to top](#table-of-contents)**
+
 
 ## Classes
 
@@ -91,144 +241,88 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	}
 	```
 
-**[⬆ back to top](#table-of-contents)**
-
-## Objects
-
-  - Use the literal syntax for object creation.
+  - Assign methods to the prototype object, instead of overwriting the prototype with a new object. Overwriting the prototype makes inheritance impossible: by resetting the prototype you'll overwrite the base!
 
     ```javascript
-    // bad
-    var item = new Object();
-
-    // good
-    var item = {};
-    ```
-
-  - Don't use [reserved words](http://es5.github.io/#x7.6.1) as keys.
-
-    ```javascript
-    // bad
-    var superman = {
-      	default: { clark: 'kent' },
-      	private: true
-    };
-
-    // good
-    var superman = {
-      	defaults: { clark: 'kent' },
-      	hidden: true
-    };
-    ```
-
-  - Use readable synonyms in place of reserved words.
-
-    ```javascript
-    // bad
-    var superman = {
-    	class: 'alien'
-    };
-
-    // bad
-    var superman = {
-    	klass: 'alien'
-    };
-
-    // good
-    var superman = {
-    	type: 'alien'
-    };
-    ```
-
-**[⬆ back to top](#table-of-contents)**
-
-## Arrays
-
-  - Use the literal syntax for array creation
-
-    ```javascript
-    // bad
-    var items = new Array();
-
-    // good
-    var items = [];
-    ```
-
-  - If you don't know array length use `Array.push`.
-
-    ```javascript
-    var someStack = [];
-
-    // bad
-    someStack[someStack.length] = 'abracadabra';
-
-    // good
-    someStack.push('abracadabra');
-    ```
-
-  - When you need to copy an array use `Array.slice`. [jsPerf](http://jsperf.com/converting-arguments-to-an-array/7)
-
-    ```javascript
-    var len = items.length,
-        itemsCopy = [],
-        i;
-
-    // bad
-    for (i = 0; i < len; i++) {
-    	itemsCopy[i] = items[i];
+    function Jedi() {
+      	console.log('new jedi');
     }
 
+    // bad
+    Jedi.prototype = {
+      	fight: function fight() {
+        	console.log('fighting');
+      	},
+
+      	block: function block() {
+        	console.log('blocking');
+      	}
+    };
+
     // good
-    itemsCopy = items.slice();
+    Jedi.prototype.fight = function fight() {
+      	console.log('fighting');
+    };
+
+    Jedi.prototype.block = function block() {
+      	console.log('blocking');
+    };
     ```
 
-  - To convert an array-like object to an array, use `Array.slice`.
+  - Methods on the prototype can return `this` to help with method chaining.
 
     ```javascript
-    function trigger() {
-    	var args = Array.prototype.slice.call(arguments);
-      
-		...
+    // bad
+    Jedi.prototype.jump = function() {
+      	this.jumping = true;
+
+      	return true;
+    };
+
+    Jedi.prototype.setHeight = function(height) {
+      	this.height = height;
+    };
+
+    var luke = new Jedi();
+
+    luke.jump(); // => true
+    luke.setHeight(20) // => undefined
+
+    // good
+    Jedi.prototype.jump = function() {
+      	this.jumping = true;
+
+      	return this;
+    };
+
+    Jedi.prototype.setHeight = function(height) {
+      	this.height = height;
+
+      	return this;
+    };
+
+    var luke = new Jedi();
+
+    luke.jump()
+    	.setHeight(20);
+    ```
+
+  - It's okay to write a custom toString() method, just make sure it works successfully and causes no side effects.
+
+    ```javascript
+    function Jedi(options) {
+      	options || (options = {});
+
+      	this.name = options.name || 'no name';
     }
-    ```
 
-**[⬆ back to top](#table-of-contents)**
+    Jedi.prototype.getName = function getName() {
+      	return this.name;
+    };
 
-
-## Strings
-
-  - Use single quotes `''` for strings
-
-    ```javascript
-    // bad
-    var name = "Bob Parr";
-
-    // good
-    var name = 'Bob Parr';
-
-    // bad
-    var fullName = "Bob " + this.lastName;
-
-    // good
-    var fullName = 'Bob ' + this.lastName;
-    ```
-
-  - Strings longer than 80 characters should be written across multiple lines using string concatenation.
-  
-    ```javascript
-    // bad
-    var errorMessage = 'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.';
-
-    // bad
-    var errorMessage = 'This is a super long error that was thrown because \
-    of Batman. When you stop to think about how Batman had anything to do \
-    with this, you would get nowhere \
-    fast.';
-
-    // good
-    var errorMessage = 'This is a super long error that was thrown because ' +
-      	'of Batman. When you stop to think about how Batman had anything to do ' +
-      	'with this, you would get nowhere fast.';
+    Jedi.prototype.toString = function toString() {
+      	return 'Jedi - ' + this.getName();
+    };
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -307,527 +401,6 @@ This should all be covered by specific rules in this guide.  Most of these rules
 		console.log(ex.message);
 	}
 	```
-
-**[⬆ back to top](#table-of-contents)**
-
-## Promises
-
-  - Each function in a promise chain should by preceded by a newline.
-
-	```javascript
-	// bad
-	return makeServiceCall().then(function (data) {
-		return parseData(data);
-	}).then(function (data) {
-		console.log(data);
-		
-		return data;
-	});
-
-	// good
-	return makeServiceCall()
-		.then(function (data) {
-			return parseData(data);
-		})
-		.then(function (data) {
-			console.log(data);
-			
-			return data;
-		});
-	```
-
-**[⬆ back to top](#table-of-contents)**
-
-## Properties
-
-  - Use dot notation when accessing properties.
-
-    ```javascript
-    var luke = {
-    	jedi: true,
-    	age: 28
-    };
-
-    // bad
-    var isJedi = luke['jedi'];
-
-    // good
-    var isJedi = luke.jedi;
-    ```
-
-  - Use subscript notation `[]` when accessing properties with a variable.
-
-    ```javascript
-    var luke = {
-    	jedi: true,
-    	age: 28
-    };
-
-    function getProp(prop) {
-    	return luke[prop];
-    }
-
-    var isJedi = getProp('jedi');
-    ```
-
-**[⬆ back to top](#table-of-contents)**
-
-
-## Variables
-
-  - Always use `var` to declare variables. Not doing so will result in global variables. We want to avoid polluting the global namespace. 
-
-    ```javascript
-    // bad
-    superPower = new SuperPower();
-
-    // good
-    var superPower = new SuperPower();
-    ```
-
-  - Use one `var` declaration for multiple variables and declare each variable on a newline.
-
-    ```javascript
-    // bad
-    var items = getItems();
-    var goSportsTeam = true;
-    var dragonball = 'z';
-
-    // good
-    var items = getItems(),
-        goSportsTeam = true,
-        dragonball = 'z';
-    ```
-
-  - Declare unassigned variables last. This is helpful when later on you might need to assign a variable depending on one of the previous assigned variables.
-
-    ```javascript
-    // bad
-    var i, len, dragonball,
-        items = getItems(),
-        goSportsTeam = true;
-
-    // bad
-    var i, items = getItems(),
-        dragonball,
-        goSportsTeam = true,
-        len;
-
-    // good
-    var items = getItems(),
-        goSportsTeam = true,
-        dragonball,
-        length,
-        i;
-    ```
-
-  - Assign variables at the top of their scope when possible. This helps avoid issues with variable declaration and assignment hoisting related issues.
-
-    ```javascript
-    // bad
-    function() {
-		test();
-
-		console.log('doing stuff..');
-		
-		//..other stuff..
-		
-		var name = getName();
-		
-		if (name === 'test') {
-			return false;
-		}
-		
-		return name;
-    }
-
-    // good
-    function() {
-      	var name = getName();
-
-      	test();
-
-      	console.log('doing stuff..');
-
-      	//..other stuff..
-
-      	if (name === 'test') {
-        	return false;
-      	}
-
-      	return name;
-    }
-
-    // bad
-    function() {
-      var name = getName();
-
-      if (!arguments.length) {
-        return false;
-      }
-
-      return true;
-    }
-
-    // good
-    function() {
-
-      if (!arguments.length) {
-        return false;
-      }
-
-      var name = getName();
-
-      return true;
-    }
-    ```
-
-**[⬆ back to top](#table-of-contents)**
-
-
-## Hoisting
-
-  - Variable declarations get hoisted to the top of their scope, their assignment does not.
-
-    ```javascript
-    // we know this wouldn't work (assuming there
-    // is no notDefined global variable)
-    function example() {
-    	console.log(notDefined); // => throws a ReferenceError
-    }
-
-    // creating a variable declaration after you
-    // reference the variable will work due to
-    // variable hoisting. Note: the assignment
-    // value of `true` is not hoisted.
-    function example() {
-      	console.log(declaredButNotAssigned); // => undefined
-
-      	var declaredButNotAssigned = true;
-    }
-
-    // The interpreter is hoisting the variable
-    // declaration to the top of the scope.
-    // Which means our example could be rewritten as:
-    function example() {
-      	var declaredButNotAssigned;
-
-      	console.log(declaredButNotAssigned); // => undefined
-
-      	declaredButNotAssigned = true;
-    }
-    ```
-
-  - Anonymous function expressions hoist their variable name, but not the function assignment.
-
-    ```javascript
-    function example() {
-      	console.log(anonymous); // => undefined
-
-      	anonymous(); // => TypeError anonymous is not a function
-
-      	var anonymous = function() {
-        	console.log('anonymous function expression');
-      	};
-    }
-    ```
-
-  - Named function expressions hoist the variable name, not the function name or the function body.
-
-    ```javascript
-    function example() {
-      	console.log(named); // => undefined
-
-      	named(); // => TypeError named is not a function
-
-      	superPower(); // => ReferenceError superPower is not defined
-
-      	var named = function superPower() {
-        	console.log('Flying');
-      	};
-    }
-
-    // the same is true when the function name
-    // is the same as the variable name.
-    function example() {
-      	console.log(named); // => undefined
-
-      	named(); // => TypeError named is not a function
-
-      	var named = function named() {
-        	console.log('named');
-      	}
-    }
-    ```
-
-  - Function declarations hoist their name and the function body.
-
-    ```javascript
-    function example() {
-      	superPower(); // => Flying
-
-      	function superPower() {
-        	console.log('Flying');
-      	}
-    }
-    ```
-
-  - For more information refer to [JavaScript Scoping & Hoisting](http://www.adequatelygood.com/2010/2/JavaScript-Scoping-and-Hoisting) by [Ben Cherry](http://www.adequatelygood.com/)
-
-**[⬆ back to top](#table-of-contents)**
-
-
-
-## Conditional Expressions & Equality
-
-  - Use `===` and `!==` over `==` and `!=`.
-  
-  - Conditional expressions are evaluated using coercion with the `ToBoolean` method and always follow these simple rules:
-
-    + **Objects** evaluate to **true**
-    + **Undefined** evaluates to **false**
-    + **Null** evaluates to **false**
-    + **Booleans** evaluate to **the value of the boolean**
-    + **Numbers** evaluate to **false** if **+0, -0, or NaN**, otherwise **true**
-    + **Strings** evaluate to **false** if an empty string `''`, otherwise **true**
-
-    ```javascript
-    if ([0]) {
-      	// true
-      	// An array is an object, objects evaluate to true
-    }
-    ```
-
-  - Use shortcuts.
-
-    ```javascript
-    // bad
-    if (name !== '') {
-      	// ...stuff...
-    }
-
-    // good
-    if (name) {
-      	// ...stuff...
-    }
-
-    // bad
-    if (collection.length > 0) {
-      	// ...stuff...
-    }
-
-    // good
-    if (collection.length) {
-      	// ...stuff...
-    }
-    ```
-
-  - For more information see [Truth Equality and JavaScript](http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/#more-2108) by Angus Croll
-
-  - Use multiple lines for complex conditionals, starting each line with a conditional operator (e.g. `&&`).
-
-	```javascript
-	// bad
-	function isReadOnly() {
-		return _this.hasLock && _this.status !== 'readonly' && !view.isReadOnly();
-	}
-
-	// good
-	function isReadOnly() {
-
-		return _this.hasLock 
-			&& _this.status !== 'readonly' 
-			&& !view.isReadOnly();
-	}
-	```
-
-**[⬆ back to top](#table-of-contents)**
-
-
-## Blocks
-
-  - Avoid single-line blocks.
-  	
-	```javascript
-	// bad
-	if (test) { count++; }
-
-	// good
-	if (test) {
-		count++;
-	}
-	```
-
-  - Use braces with all multi-line blocks.
-
-    ```javascript
-    // bad
-    if (test)
-      	return false;
-
-    // good
-    if (test) {
-      	return false;
-    }
-
-    // bad
-    function() { return false; }
-
-    // good
-    function() {
-      	return false;
-    }
-    ```
-
-  - `else` blocks should be preceded by a newline.
-  
-	```javascript
-	// bad
-	if (customer) {
-		// ...logic...
-	} else {
-		// ...logic...
-	}
-
-	// good
-	if (customer {
-		// ...logic...
-	}
-	else {
-		// ...logic...
-	}
-	```
-
-**[⬆ back to top](#table-of-contents)**
-
-
-## Comments
-
-  - Use `/** ... */` for multiline comments. Use `* *` to break the comments up by idea.
-  
-	```javascript
-    // bad
-    // Returns a tooltip string for a customer
-    // Includes name, address, city, state,
-	// branch, and phone
-	// Additional fields are configurable
-    function createCustomerTooltip(customer) {
-      
-    }
-
-    // good
-	/**
-	*  Returns a tooltip string for a customer
-	*  * Includes name, address, city, state,
-	*    branch, and phone
-	*  * Additional fields are configurable
-	function createCustomerTooltip(customer) {		
-		
-	}
-	
-	```
-
-  - Comments describing functions can specify types and values for parameters and return values.
-
-    ```javascript
-    // good
-    /**
-     *  make() returns a new element
-     *  based on the passed in tag name
-     *
-     *  @param <String> tag
-     *  @return <Element> element
-     */
-    function make(tag) {
-      	...
-
-      	return element;
-    }
-    ```
-
-  - Use `####` for structural comments that describe multiple lines of code within a function.
-
-	```javascript
-	// good
-	function createCustomerTooltip(customer) {
-		var address,
-			city,
-			state
-			tooltipText;
-
-		//#### Create the address string ####
-		city = getLookupValue(lookups.city, customer.cityCde);
-		state = getLookupValue(lookups.state, customer.stateCde);
-
-		address = customer.streetAddress
-			+ city.name
-			+ state.name;
-			
-		//#### Create and return tooltip string ####
-		tooltipText = customer.fullName + ' ' 
-			+ address;
-
-		console.log(tooltipText);
-
-		return tooltipText;
-	}
-	```
-
-  - Use `//` for single line comments. Place single line comments on a newline above the subject of the comment. Put an empty line before the comment.
-
-    ```javascript
-    // bad
-    var active = true;  // is current tab
-
-    // good
-    // is current tab
-    var active = true;
-
-    // bad
-    function getType() {
-      	console.log('fetching type...');
-      	// set the default type to 'no type'
-      	var type = this._type || 'no type';
-
-      	return type;
-    }
-
-    // good
-    function getType() {
-      	console.log('fetching type...');
-
-      	// set the default type to 'no type'
-      	var type = this._type || 'no type';
-
-      	return type;
-    }
-    ```
-
-  - Prefixing your comments with `HACK` or `TODO` helps other developers quickly understand if you're pointing out a problem that needs to be revisited. These are different than regular comments because they are actionable. 
-
-  - Use `// HACK:` to note temporary fixes.
-
-    ```javascript
-    function formatDate(date) {
-
-      	// HACK: Temporary solution, TP - B1234
-      	return hackToFixDateTime(date);
-    }
-    ```
-
-  - **Note:** If you're going to check in hacky code (and you had better have a good reason to do so), make sure to log an item in Teampulse to re-visit and update the code.  Include the Teampulse ID here.	
-
-  - Use `// TODO:` to describe future enhancements or requirements.
-
-    ```javascript
-    function Calculator() {
-
-      	// TODO: total should be configurable by an options param
-      	this.total = 0;
-
-      	return this;
-    }
-  ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1021,51 +594,632 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
-## Regions 
 
-  - Use regions to group similar classes or functions, making it easier to navigate through larger files.
+## Variables
 
-  - Include a newline between the region beginning/end and the enclosed functions.
+  - Always use `var` to declare variables. Not doing so will result in global variables. We want to avoid polluting the global namespace. 
 
+    ```javascript
+    // bad
+    superPower = new SuperPower();
+
+    // good
+    var superPower = new SuperPower();
+    ```
+
+  - Use one `var` declaration for multiple variables and declare each variable on a newline.
+
+    ```javascript
+    // bad
+    var items = getItems();
+    var goSportsTeam = true;
+    var dragonball = 'z';
+
+    // good
+    var items = getItems(),
+        goSportsTeam = true,
+        dragonball = 'z';
+    ```
+
+  - Declare unassigned variables last. This is helpful when later on you might need to assign a variable depending on one of the previous assigned variables.
+
+    ```javascript
+    // bad
+    var i, len, dragonball,
+        items = getItems(),
+        goSportsTeam = true;
+
+    // bad
+    var i, items = getItems(),
+        dragonball,
+        goSportsTeam = true,
+        len;
+
+    // good
+    var items = getItems(),
+        goSportsTeam = true,
+        dragonball,
+        length,
+        i;
+    ```
+
+  - Assign variables at the top of their scope when possible. This helps avoid issues with variable declaration and assignment hoisting related issues.
+
+    ```javascript
+    // bad
+    function() {
+		test();
+
+		console.log('doing stuff..');
+		
+		//..other stuff..
+		
+		var name = getName();
+		
+		if (name === 'test') {
+			return false;
+		}
+		
+		return name;
+    }
+
+    // good
+    function() {
+      	var name = getName();
+
+      	test();
+
+      	console.log('doing stuff..');
+
+      	//..other stuff..
+
+      	if (name === 'test') {
+        	return false;
+      	}
+
+      	return name;
+    }
+
+    // bad
+    function() {
+      var name = getName();
+
+      if (!arguments.length) {
+        return false;
+      }
+
+      return true;
+    }
+
+    // good
+    function() {
+
+      if (!arguments.length) {
+        return false;
+      }
+
+      var name = getName();
+
+      return true;
+    }
+    ```
+
+
+### Hoisting
+
+  - Variable declarations get hoisted to the top of their scope, their assignment does not.
+
+    ```javascript
+    // we know this wouldn't work (assuming there
+    // is no notDefined global variable)
+    function example() {
+    	console.log(notDefined); // => throws a ReferenceError
+    }
+
+    // creating a variable declaration after you
+    // reference the variable will work due to
+    // variable hoisting. Note: the assignment
+    // value of `true` is not hoisted.
+    function example() {
+      	console.log(declaredButNotAssigned); // => undefined
+
+      	var declaredButNotAssigned = true;
+    }
+
+    // The interpreter is hoisting the variable
+    // declaration to the top of the scope.
+    // Which means our example could be rewritten as:
+    function example() {
+      	var declaredButNotAssigned;
+
+      	console.log(declaredButNotAssigned); // => undefined
+
+      	declaredButNotAssigned = true;
+    }
+    ```
+
+  - Anonymous function expressions hoist their variable name, but not the function assignment.
+
+    ```javascript
+    function example() {
+      	console.log(anonymous); // => undefined
+
+      	anonymous(); // => TypeError anonymous is not a function
+
+      	var anonymous = function() {
+        	console.log('anonymous function expression');
+      	};
+    }
+    ```
+
+  - Named function expressions hoist the variable name, not the function name or the function body.
+
+    ```javascript
+    function example() {
+      	console.log(named); // => undefined
+
+      	named(); // => TypeError named is not a function
+
+      	superPower(); // => ReferenceError superPower is not defined
+
+      	var named = function superPower() {
+        	console.log('Flying');
+      	};
+    }
+
+    // the same is true when the function name
+    // is the same as the variable name.
+    function example() {
+      	console.log(named); // => undefined
+
+      	named(); // => TypeError named is not a function
+
+      	var named = function named() {
+        	console.log('named');
+      	}
+    }
+    ```
+
+  - Function declarations hoist their name and the function body.
+
+    ```javascript
+    function example() {
+      	superPower(); // => Flying
+
+      	function superPower() {
+        	console.log('Flying');
+      	}
+    }
+    ```
+
+  - For more information refer to [JavaScript Scoping & Hoisting](http://www.adequatelygood.com/2010/2/JavaScript-Scoping-and-Hoisting) by [Ben Cherry](http://www.adequatelygood.com/)
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Blocks
+
+  - Avoid single-line blocks.
+  	
 	```javascript
-	function Collateral() {
-		var _this = this;	
+	// bad
+	if (test) { count++; }
 
-		//#region Private Functions
-
-		function getComponents() {
-
-		}
-
-		function getLinkedLoans() {
-
-		}
-
-		//#endregion
-
-		//#region Public Functions
-
-		this.create = function () {
-
-		};		
-
-		this.update = function () {
-	
-		};
-
-		this.delete = function () {
-
-		};
-
-		//#endregion
+	// good
+	if (test) {
+		count++;
 	}
 	```
 
-  - **Note:** Don't use regions inside a function.  An individual function should not be big enough to require this.
+  - Use braces with all multi-line blocks.
+
+    ```javascript
+    // bad
+    if (test)
+      	return false;
+
+    // good
+    if (test) {
+      	return false;
+    }
+
+    // bad
+    function() { return false; }
+
+    // good
+    function() {
+      	return false;
+    }
+    ```
+
+  - `else` blocks should be preceded by a newline.
   
-  - **Note:** Javascript regions only work with the Web Essentials extension installed for Visual Studio. 
+	```javascript
+	// bad
+	if (customer) {
+		// ...logic...
+	} else {
+		// ...logic...
+	}
+
+	// good
+	if (customer {
+		// ...logic...
+	}
+	else {
+		// ...logic...
+	}
+	```
 
 **[⬆ back to top](#table-of-contents)**
+
+
+## Objects
+
+  - Use the literal syntax for object creation.
+
+    ```javascript
+    // bad
+    var item = new Object();
+
+    // good
+    var item = {};
+    ```
+
+  - Don't use [reserved words](http://es5.github.io/#x7.6.1) as keys.
+
+    ```javascript
+    // bad
+    var superman = {
+      	default: { clark: 'kent' },
+      	private: true
+    };
+
+    // good
+    var superman = {
+      	defaults: { clark: 'kent' },
+      	hidden: true
+    };
+    ```
+
+  - Use readable synonyms in place of reserved words.
+
+    ```javascript
+    // bad
+    var superman = {
+    	class: 'alien'
+    };
+
+    // bad
+    var superman = {
+    	klass: 'alien'
+    };
+
+    // good
+    var superman = {
+    	type: 'alien'
+    };
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Arrays
+
+  - Use the literal syntax for array creation
+
+    ```javascript
+    // bad
+    var items = new Array();
+
+    // good
+    var items = [];
+    ```
+
+  - If you don't know array length use `Array.push`.
+
+    ```javascript
+    var someStack = [];
+
+    // bad
+    someStack[someStack.length] = 'abracadabra';
+
+    // good
+    someStack.push('abracadabra');
+    ```
+
+  - When you need to copy an array use `Array.slice`. [jsPerf](http://jsperf.com/converting-arguments-to-an-array/7)
+
+    ```javascript
+    var len = items.length,
+        itemsCopy = [],
+        i;
+
+    // bad
+    for (i = 0; i < len; i++) {
+    	itemsCopy[i] = items[i];
+    }
+
+    // good
+    itemsCopy = items.slice();
+    ```
+
+  - To convert an array-like object to an array, use `Array.slice`.
+
+    ```javascript
+    function trigger() {
+    	var args = Array.prototype.slice.call(arguments);
+      
+		...
+    }
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Strings
+
+  - Use single quotes `''` for strings
+
+    ```javascript
+    // bad
+    var name = "Bob Parr";
+
+    // good
+    var name = 'Bob Parr';
+
+    // bad
+    var fullName = "Bob " + this.lastName;
+
+    // good
+    var fullName = 'Bob ' + this.lastName;
+    ```
+
+  - Strings longer than 80 characters should be written across multiple lines using string concatenation.
+  
+    ```javascript
+    // bad
+    var errorMessage = 'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.';
+
+    // bad
+    var errorMessage = 'This is a super long error that was thrown because \
+    of Batman. When you stop to think about how Batman had anything to do \
+    with this, you would get nowhere \
+    fast.';
+
+    // good
+    var errorMessage = 'This is a super long error that was thrown because ' +
+      	'of Batman. When you stop to think about how Batman had anything to do ' +
+      	'with this, you would get nowhere fast.';
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Properties
+
+  - Use dot notation when accessing properties.
+
+    ```javascript
+    var luke = {
+    	jedi: true,
+    	age: 28
+    };
+
+    // bad
+    var isJedi = luke['jedi'];
+
+    // good
+    var isJedi = luke.jedi;
+    ```
+
+  - Use subscript notation `[]` when accessing properties with a variable.
+
+    ```javascript
+    var luke = {
+    	jedi: true,
+    	age: 28
+    };
+
+    function getProp(prop) {
+    	return luke[prop];
+    }
+
+    var isJedi = getProp('jedi');
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Conditional Expressions & Equality
+
+  - Use `===` and `!==` over `==` and `!=`.
+  
+  - Conditional expressions are evaluated using coercion with the `ToBoolean` method and always follow these simple rules:
+
+    + **Objects** evaluate to **true**
+    + **Undefined** evaluates to **false**
+    + **Null** evaluates to **false**
+    + **Booleans** evaluate to **the value of the boolean**
+    + **Numbers** evaluate to **false** if **+0, -0, or NaN**, otherwise **true**
+    + **Strings** evaluate to **false** if an empty string `''`, otherwise **true**
+
+    ```javascript
+    if ([0]) {
+      	// true
+      	// An array is an object, objects evaluate to true
+    }
+    ```
+
+  - Use shortcuts.
+
+    ```javascript
+    // bad
+    if (name !== '') {
+      	// ...stuff...
+    }
+
+    // good
+    if (name) {
+      	// ...stuff...
+    }
+
+    // bad
+    if (collection.length > 0) {
+      	// ...stuff...
+    }
+
+    // good
+    if (collection.length) {
+      	// ...stuff...
+    }
+    ```
+
+  - For more information see [Truth Equality and JavaScript](http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/#more-2108) by Angus Croll
+
+  - Use multiple lines for complex conditionals, starting each line with a conditional operator (e.g. `&&`).
+
+	```javascript
+	// bad
+	function isReadOnly() {
+		return _this.hasLock && _this.status !== 'readonly' && !view.isReadOnly();
+	}
+
+	// good
+	function isReadOnly() {
+
+		return _this.hasLock 
+			&& _this.status !== 'readonly' 
+			&& !view.isReadOnly();
+	}
+	```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Type Casting & Coercion
+
+  - Perform type coercion at the beginning of the statement.
+  
+  - Strings:
+
+    ```javascript
+    //  => this.reviewScore = 9;
+
+    // bad
+    var totalScore = this.reviewScore + '';
+
+    // good
+    var totalScore = '' + this.reviewScore;
+
+    // bad
+    var totalScore = '' + this.reviewScore + ' total score';
+
+    // good
+    var totalScore = this.reviewScore + ' total score';
+    ```
+
+  - Use `parseInt` for Numbers and always with a radix for type casting.
+
+    ```javascript
+    var inputValue = '4';
+
+    // bad
+    var val = new Number(inputValue);
+
+    // bad
+    var val = +inputValue;
+
+    // bad
+    var val = inputValue >> 0;
+
+    // bad
+    var val = parseInt(inputValue);
+
+    // good
+    var val = Number(inputValue);
+
+    // good
+    var val = parseInt(inputValue, 10);
+    ```
+
+  - Booleans:
+
+    ```javascript
+    var age = 0;
+
+    // bad
+    var hasAge = new Boolean(age);
+
+    // good
+    var hasAge = Boolean(age);
+
+    // good
+    var hasAge = !!age;
+    ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Promises
+
+  - Each function in a promise chain should by preceded by a newline.
+
+	```javascript
+	// bad
+	return makeServiceCall().then(function (data) {
+		return parseData(data);
+	}).then(function (data) {
+		console.log(data);
+		
+		return data;
+	});
+
+	// good
+	return makeServiceCall()
+		.then(function (data) {
+			return parseData(data);
+		})
+		.then(function (data) {
+			console.log(data);
+			
+			return data;
+		});
+	```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## Events
+
+  - When attaching data payloads to events (whether DOM events or something more proprietary like Backbone events), pass a hash instead of a raw value. This allows a subsequent contributor to add more data to the event payload without finding and updating every handler for the event. For example, instead of:
+
+    ```js
+    // bad
+    $(this).trigger('listingUpdated', listing.id);
+
+    ...
+
+    $(this).on('listingUpdated', function(e, listingId) {
+      	// do something with listingId
+    });
+    ```
+
+    prefer:
+
+    ```js
+    // good
+    $(this).trigger('listingUpdated', { listingId : listing.id });
+
+    ...
+
+    $(this).on('listingUpdated', function(e, data) {
+      	// do something with data.listingId
+    });
+    ```
+
+  **[⬆ back to top](#table-of-contents)**
+
 
 ## Commas
 
@@ -1157,337 +1311,185 @@ This should all be covered by specific rules in this guide.  Most of these rules
 **[⬆ back to top](#table-of-contents)**
 
 
-## Type Casting & Coercion
+## Comments
 
-  - Perform type coercion at the beginning of the statement.
+  - Use `/** ... */` for multiline comments. Use `* *` to break the comments up by idea.
   
-  - Strings:
-
-    ```javascript
-    //  => this.reviewScore = 9;
-
-    // bad
-    var totalScore = this.reviewScore + '';
-
-    // good
-    var totalScore = '' + this.reviewScore;
-
-    // bad
-    var totalScore = '' + this.reviewScore + ' total score';
-
-    // good
-    var totalScore = this.reviewScore + ' total score';
-    ```
-
-  - Use `parseInt` for Numbers and always with a radix for type casting.
-
-    ```javascript
-    var inputValue = '4';
-
-    // bad
-    var val = new Number(inputValue);
-
-    // bad
-    var val = +inputValue;
-
-    // bad
-    var val = inputValue >> 0;
-
-    // bad
-    var val = parseInt(inputValue);
-
-    // good
-    var val = Number(inputValue);
-
-    // good
-    var val = parseInt(inputValue, 10);
-    ```
-
-  - Booleans:
-
-    ```javascript
-    var age = 0;
-
-    // bad
-    var hasAge = new Boolean(age);
-
-    // good
-    var hasAge = Boolean(age);
-
-    // good
-    var hasAge = !!age;
-    ```
-
-**[⬆ back to top](#table-of-contents)**
-
-
-## Naming Conventions
-  - Be descriptive with your naming.
-
 	```javascript
-	// bad
-	var count = add(l1, l2).length;
-
-	// good
-	var customerCount = addCustomerLists(customerList1, customerList2).length;
-	```
-
-  - Boolean property names should ask a question.
-
-	```javascript
-	// bad
-	var readOnly = false;
-
-	// good
-	var isReadOnly = false;
-	```
-
-  - Avoid single letter names. 
-
-    ```javascript
     // bad
-    function q() {
+    // Returns a tooltip string for a customer
+    // Includes name, address, city, state,
+	// branch, and phone
+	// Additional fields are configurable
+    function createCustomerTooltip(customer) {
       
     }
 
     // good
-    function query() {
-      
+	/**
+	*  Returns a tooltip string for a customer
+	*  * Includes name, address, city, state,
+	*    branch, and phone
+	*  * Additional fields are configurable
+	function createCustomerTooltip(customer) {		
+		
+	}
+	
+	```
+
+  - Comments describing functions can specify types and values for parameters and return values.
+
+    ```javascript
+    // good
+    /**
+     *  make() returns a new element
+     *  based on the passed in tag name
+     *
+     *  @param <String> tag
+     *  @return <Element> element
+     */
+    function make(tag) {
+      	...
+
+      	return element;
     }
     ```
 
-  - Avoid acronyms as parameter names while looping. 
-
-    ```javascript
-    // bad
-    commAppCollateralJoin.filter(function (cacj) {
-		console.log(cacj);
-	});
-
-    // good
-    commAppCollateralJoin.filter(function (commitmentCollateralJoin) {
-		console.log(commitmentCollateralJoin);
-	});
-    ```
-
-  - Use camelCase when naming objects, functions, and instances.
-
-    ```javascript
-    // bad
-    var OBJEcttsssss = {};
-
-    var this_is_my_object = {};
-
-    function c() {}
-
-    var u = new user({
-      	name: 'Bob Parr'
-    });
-
-    // good
-    var thisIsMyObject = {};
-
-    function thisIsMyFunction() {}
-
-    var user = new User({
-      	name: 'Bob Parr'
-    });
-    ```
-
-  - Use PascalCase when naming constructors or classes.
-
-    ```javascript
-    // bad
-    function user(options) {
-      	this.name = options.name;
-    }
-
-    var bad = new user({
-      	name: 'nope'
-    });
-
-    // good
-    function User(options) {
-      	this.name = options.name;
-    }
-
-    var good = new User({
-      	name: 'yup'
-    });
-    ```
-
-  - Use a leading underscore `_` when naming private properties
-
-    ```javascript
-    // bad
-    this.__firstName__ = 'Panda';
-    this.firstName_ = 'Panda';
-
-    // good
-    this._firstName = 'Panda';
-    ```
-
-  - When saving a reference to `this` use `_this`.
-
-    ```javascript
-    function() {
-      var _this = this;
-
-      return function() {
-        	console.log(_this);
-      };
-    }
-    ```
-
-  - Save references to a base class as `_base`.
+  - Use `####` for structural comments that describe multiple lines of code within a function.
 
 	```javascript
-	function CollateralWidget() {
-		var _base = $.copyFunctions(Widget.call(this, name, parent, data));
+	// good
+	function createCustomerTooltip(customer) {
+		var address,
+			city,
+			state
+			tooltipText;
 
-		// ...logic...
+		//#### Create the address string ####
+		city = getLookupValue(lookups.city, customer.cityCde);
+		state = getLookupValue(lookups.state, customer.stateCde);
+
+		address = customer.streetAddress
+			+ city.name
+			+ state.name;
+			
+		//#### Create and return tooltip string ####
+		tooltipText = customer.fullName + ' ' 
+			+ address;
+
+		console.log(tooltipText);
+
+		return tooltipText;
 	}
 	```
 
-  - Name your functions. This is helpful for stack traces.
+  - Use `//` for single line comments. Place single line comments on a newline above the subject of the comment. Put an empty line before the comment.
 
     ```javascript
     // bad
-    var log = function(msg) {
-      	console.log(msg);
-    };
+    var active = true;  // is current tab
 
     // good
-    var log = function log(msg) {
-      	console.log(msg);
-    };
+    // is current tab
+    var active = true;
+
+    // bad
+    function getType() {
+      	console.log('fetching type...');
+      	// set the default type to 'no type'
+      	var type = this._type || 'no type';
+
+      	return type;
+    }
+
+    // good
+    function getType() {
+      	console.log('fetching type...');
+
+      	// set the default type to 'no type'
+      	var type = this._type || 'no type';
+
+      	return type;
+    }
     ```
+
+  - Prefixing your comments with `HACK` or `TODO` helps other developers quickly understand if you're pointing out a problem that needs to be revisited. These are different than regular comments because they are actionable. 
+
+  - Use `// HACK:` to note temporary fixes.
+
+    ```javascript
+    function formatDate(date) {
+
+      	// HACK: Temporary solution, TP - B1234
+      	return hackToFixDateTime(date);
+    }
+    ```
+
+  - **Note:** If you're going to check in hacky code (and you had better have a good reason to do so), make sure to log an item in Teampulse to re-visit and update the code.  Include the Teampulse ID here.	
+
+  - Use `// TODO:` to describe future enhancements or requirements.
+
+    ```javascript
+    function Calculator() {
+
+      	// TODO: total should be configurable by an options param
+      	this.total = 0;
+
+      	return this;
+    }
+  ```
+
+
+  ### Regions 
+
+  - Use regions to group similar classes or functions, making it easier to navigate through larger files.
+
+  - Include a newline between the region beginning/end and the enclosed functions.
+
+	```javascript
+	function Collateral() {
+		var _this = this;	
+
+		//#region Private Functions
+
+		function getComponents() {
+
+		}
+
+		function getLinkedLoans() {
+
+		}
+
+		//#endregion
+
+		//#region Public Functions
+
+		this.create = function () {
+
+		};		
+
+		this.update = function () {
+	
+		};
+
+		this.delete = function () {
+
+		};
+
+		//#endregion
+	}
+	```
+
+  - **Note:** Don't use regions inside a function.  An individual function should not be big enough to require this.
+  
+  - **Note:** Javascript regions require the [Web Essentials](http://vswebessentials.com/) extension for Visual Studio. 
 
 **[⬆ back to top](#table-of-contents)**
 
 
-## Constructors
+## Third Party 
 
-  - Assign methods to the prototype object, instead of overwriting the prototype with a new object. Overwriting the prototype makes inheritance impossible: by resetting the prototype you'll overwrite the base!
-
-    ```javascript
-    function Jedi() {
-      	console.log('new jedi');
-    }
-
-    // bad
-    Jedi.prototype = {
-      	fight: function fight() {
-        	console.log('fighting');
-      	},
-
-      	block: function block() {
-        	console.log('blocking');
-      	}
-    };
-
-    // good
-    Jedi.prototype.fight = function fight() {
-      	console.log('fighting');
-    };
-
-    Jedi.prototype.block = function block() {
-      	console.log('blocking');
-    };
-    ```
-
-  - Methods can return `this` to help with method chaining.
-
-    ```javascript
-    // bad
-    Jedi.prototype.jump = function() {
-      	this.jumping = true;
-
-      	return true;
-    };
-
-    Jedi.prototype.setHeight = function(height) {
-      	this.height = height;
-    };
-
-    var luke = new Jedi();
-
-    luke.jump(); // => true
-    luke.setHeight(20) // => undefined
-
-    // good
-    Jedi.prototype.jump = function() {
-      	this.jumping = true;
-
-      	return this;
-    };
-
-    Jedi.prototype.setHeight = function(height) {
-      	this.height = height;
-
-      	return this;
-    };
-
-    var luke = new Jedi();
-
-    luke.jump()
-    	.setHeight(20);
-    ```
-
-
-  - It's okay to write a custom toString() method, just make sure it works successfully and causes no side effects.
-
-    ```javascript
-    function Jedi(options) {
-      	options || (options = {});
-
-      	this.name = options.name || 'no name';
-    }
-
-    Jedi.prototype.getName = function getName() {
-      	return this.name;
-    };
-
-    Jedi.prototype.toString = function toString() {
-      	return 'Jedi - ' + this.getName();
-    };
-    ```
-
-**[⬆ back to top](#table-of-contents)**
-
-
-## Events
-
-  - When attaching data payloads to events (whether DOM events or something more proprietary like Backbone events), pass a hash instead of a raw value. This allows a subsequent contributor to add more data to the event payload without finding and updating every handler for the event. For example, instead of:
-
-    ```js
-    // bad
-    $(this).trigger('listingUpdated', listing.id);
-
-    ...
-
-    $(this).on('listingUpdated', function(e, listingId) {
-      	// do something with listingId
-    });
-    ```
-
-    prefer:
-
-    ```js
-    // good
-    $(this).trigger('listingUpdated', { listingId : listing.id });
-
-    ...
-
-    $(this).on('listingUpdated', function(e, data) {
-      	// do something with data.listingId
-    });
-    ```
-
-  **[⬆ back to top](#table-of-contents)**
-
-
-## jQuery
+### jQuery
 
   - Prefix jQuery object variables with a `$`.
 
@@ -1552,7 +1554,8 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
-## Knockout
+
+### Knockout
 
   - Use `ko.unwrap` and `ko.unwrapPeek` when ensure whether a valuable is observable or not.
   
@@ -1576,7 +1579,10 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
-## Resources
+
+## Appendices
+
+### Resources
 
 **Compatibility**
 
@@ -1654,7 +1660,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
-## License
+### License
 
 (The MIT License)
 
