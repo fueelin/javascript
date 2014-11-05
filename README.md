@@ -90,20 +90,6 @@ This should all be covered by specific rules in this guide.  Most of these rules
     }
     ```
 
-  - Avoid acronyms as parameter names while looping. 
-
-    ```javascript
-    // bad
-    commAppCollateralJoin.filter(function (cacj) {
-		console.log(cacj);
-	});
-
-    // good
-    commAppCollateralJoin.filter(function (commitmentCollateralJoin) {
-		console.log(commitmentCollateralJoin);
-	});
-    ```
-
   - Use camelCase when naming objects, functions, and instances.
 
     ```javascript
