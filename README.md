@@ -29,6 +29,7 @@
   	1. [jQuery](#jquery)
   	1. [Knockout](#knockout)
   1. [Appendices](#appendices)
+  	1. [Revision History](#revision-history)
   	1. [Resources](#resources)
   	1. [License](#license)
 
@@ -136,7 +137,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
     });
     ```
 
-  - Use a leading underscore `_` when naming private properties
+  - Use a leading underscore `_` when naming properties that are 'theoretically' private but technically public.  For     example, this approach is required to allow a subclass to access its base class' private members.
 
     ```javascript
     // bad
@@ -158,6 +159,8 @@ This should all be covered by specific rules in this guide.  Most of these rules
       };
     }
     ```
+    
+    - **Note:** This means that `thisVM` is no longer valid.	
 
   - Save references to a base class as `_base`.
 
@@ -190,7 +193,9 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
   - Module names should match the returned type.
   
-  - Modules returning classes will be upper case, while modules returning namespaces will be lower case.
+  - Modules that return a class/constructor should be named in Pascal case.
+  
+  - Modules that return a namespace/singleton should be named in Camel case.
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -325,12 +330,12 @@ This should all be covered by specific rules in this guide.  Most of these rules
     };
 
 	// public anonymous function expression
-	_this.getName = function () {
+	this.getName = function () {
 		return 'test';
 	}
 
 	// public named function expression
-	_this.getName = function getName() {
+	this.getName = function getName() {
 		return 'test';
 	}
 
@@ -449,6 +454,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	// good
 	var customer = selectedCustomer();
 
+	//Precede 'if' block with newline.
 	if (customer) {
 		console.log(customerr);
 	}
@@ -456,8 +462,10 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	// good
 	var allCustomers = customerList();
 
+	//Precede 'function' block with newline.
 	allCustomers.forEach(function (customer) {
 
+		//Precede 'if' block with newline.
 		if (customer.isBusiness) {
 			console.log(customer);
 		}
@@ -1299,24 +1307,24 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 ## Comments
 
-  - Use `/** ... */` for multiline comments. Use `* *` to break the comments up by idea.
+  - Use `///` for multiline comments. Use `* *` to break the comments up by idea.
   
 	```javascript
-    // bad
-    // Returns a tooltip string for a customer
-    // Includes name, address, city, state,
+	// bad
+	// Returns a tooltip string for a customer
+	// Includes name, address, city, state,
 	// branch, and phone
 	// Additional fields are configurable
-    function createCustomerTooltip(customer) {
-      
-    }
-
-    // good
-	/**
-	*  Returns a tooltip string for a customer
-	*  * Includes name, address, city, state,
-	*    branch, and phone
-	*  * Additional fields are configurable
+	function createCustomerTooltip(customer) {
+	
+	}
+	
+	// good
+	///
+	/// Returns a tooltip string for a customer
+	/// * Includes name, address, city, state,
+	///    branch, and phone
+	/// * Additional fields are configurable
 	function createCustomerTooltip(customer) {		
 		
 	}
@@ -1325,21 +1333,20 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
   - Comments describing functions can specify types and values for parameters and return values.
 
-    ```javascript
-    // good
-    /**
-     *  make() returns a new element
-     *  based on the passed in tag name
-     *
-     *  @param <String> tag
-     *  @return <Element> element
-     */
-    function make(tag) {
-      	...
-
-      	return element;
-    }
-    ```
+	```javascript
+	// good
+	///
+	///  make() returns a new element
+	///  based on the passed in tag name
+	///
+	///  @param <String> tag
+	///  @return <Element> element
+	function make(tag) {
+	      ...
+	
+	      return element;
+	}
+	```
 
   - Use `####` for structural comments that describe multiple lines of code within a function.
 
@@ -1543,7 +1550,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 ### Knockout
 
-  - Use `ko.unwrap` and `ko.unwrapPeek` when ensure whether a valuable is observable or not.
+  - Use `ko.unwrap` and `ko.unwrapPeek` to access a value that may or may not be observable.
   
 	```javascript
 
@@ -1567,6 +1574,12 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 
 ## Appendices
+
+### Revision History
+
+Date       | Modified By   | Version | Note
+---------- | ------------- | ------- | ------------------------------
+11/17/2014 | Tim Beck      | 1.0     | Revisions from initial feedback.
 
 ### Resources
 
