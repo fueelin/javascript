@@ -491,7 +491,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	);
 	```
 
-  - Precede `return` statements with a newline
+  - Precede `return` statements with a newline, unless they're the only line in a block.
 
 	```javascript
 	// bad
@@ -499,12 +499,35 @@ This should all be covered by specific rules in this guide.  Most of these rules
 		var customer = customerCache[id];
 		return customer;		
 	}
+	
+	// bad
+	function getCustomer(id) {
+		var customer = customerCache[id];
+		
+		if (customer) {
+		
+			return customer;
+		}
+		
+		return 'No customer found';
+	}
 
 	// good
 	function getCustomer(id) {
 		var customer = customerCache[id];
 
 		return customer;		
+	}
+	
+	// good
+	function getCustomer(id) {
+		var customer = customerCache[id];
+		
+		if (customer) {
+			return customer;
+		}
+		
+		return 'No customer found';
 	}
 	```
 
