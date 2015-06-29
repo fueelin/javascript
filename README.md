@@ -16,8 +16,9 @@
   1. [Objects](#objects)
   1. [Arrays](#arrays)
   1. [Strings](#strings)
+  1. [Enums](#enums)
   1. [Properties](#properties)
-  2. [Conditional Expressions & Equality](#conditional-expressions--equality)
+  1. [Conditional Expressions & Equality](#conditional-expressions--equality)
   1. [Type Casting & Coercion](#type-casting--coercion)
   1. [Promises](#promises)
   1. [Events](#events)
@@ -148,19 +149,30 @@ This should all be covered by specific rules in this guide.  Most of these rules
     this._firstName = 'Panda';
     ```
 
-  - When saving a reference to `this` use `_this`.
+  - When saving a reference to `this` use `_this` (except nested classes).
 
     ```javascript
-    function() {
+    function Customer() {
       var _this = this;
 
       return function() {
-        	console.log(_this);
+      	console.log(_this);
       };
     }
     ```
     
-    - **Note:** This means that `thisVM` is no longer valid.	
+  - When saving a reference to `this` in a nested class, use `_thisVM`.
+  
+  ```javascript
+  function Customer() {
+  	var _this = this;
+  	
+  	function Address() {
+  		var _thisVM = this;
+  	}
+  }
+  
+  - **Note:** We need a separate, standard name for this situation, but `_thisVM` can be inaccurate.  Other suggestions are appreciated.
 
   - Save references to a base class as `_base`.
 
@@ -187,6 +199,26 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 
 ## Classes
+
+  - Define properties on `this`, not `_this`, during construction.  
+   
+  ```javascript
+  // bad
+  function Customer () {
+  	var _this = this;
+  	
+  	_this.id;
+  	// ...etc...
+  }
+  
+  // good
+  function Customer () {
+  	var _this = this;
+  	
+  	this.id;
+  	// ...etc...
+  }
+  ```
 
   - Group properties logically, with newlines separating these groupings.
   	
@@ -1060,6 +1092,26 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
+## Enums
+
+  - Avoid 'magic numbers', instead using enum values.
+   
+  ```javascript
+  // bad
+  function UserScreen() {
+  	var _this = this;
+  	
+  	this.screenCde = 3;
+  }
+  
+  // good
+  function UserScreen() {
+  	var _this = this;
+  	
+  	this.screenCde = fpiEnums.screens.user;
+  }
+
+**[⬆ back to top](#table-of-contents)**
 
 ## Properties
 
@@ -1618,6 +1670,27 @@ This should all be covered by specific rules in this guide.  Most of these rules
     ```
 
   - Use `on` to add event handlers - not `bind` or `live`. 
+   
+  - Use `_this.UI` as the context when binding events for ViewModel types.  This prevents unintentionally overlapping handlers.
+  
+  ```javascript
+  // bad
+  function SearchWidget() {
+  	var _this = this;
+  	
+  	// ...stuff...
+  	
+  	$('.search-widget').on('click', 'button', someFunction);
+  }
+  
+  // good
+  function SearchWidget() {
+  	var _this = this;
+  	
+  	// ...stuff...
+  	
+  	_this.UI.on('click', 'button', someFunction);
+  }
 
 **[⬆ back to top](#table-of-contents)**
 
