@@ -172,20 +172,6 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	}
 	```
 
-  - Name your functions. This is helpful for stack traces.
-
-    ```javascript
-    // bad
-    var log = function(msg) {
-      	console.log(msg);
-    };
-
-    // good
-    var log = function log(msg) {
-      	console.log(msg);
-    };
-    ```
-
 **[⬆ back to top](#table-of-contents)**
 
 
@@ -344,6 +330,68 @@ This should all be covered by specific rules in this guide.  Most of these rules
     	console.log('Welcome to the Internet. Please follow me.');
     })();
     ```
+    
+  - Always use the 'public named function expression' when defining public functions.  This makes debugging much easier.
+   
+  ```javascript
+  // bad
+  _this.save = function (data) { 
+  	// ...stuff...
+  }
+  
+  // good
+  _this.save = function save (data) {
+  	// ...stuff...
+  }
+  ```
+  
+  - Naming promise callbacks is optional, but should be done for complex logic that may require debugging.
+
+  ```javascript
+  // good
+  _this.loading().then(function () {
+  	// ...stuff...
+  });
+  
+  // good
+  $.when(getLoanData, getCollateralData).then(function mergeCollateralData (loanData, collateralData) {
+  	// ...stuff...
+  });
+  ```
+  
+  - Always name the `read` and `write` callbacks used to define a computed observable.  The function names should be the same as the computed's name, but with 'read' or 'write' prepended.
+   
+  ```javascript
+  // bad
+  var isVisible = ko.computed(function () {
+  	// ...stuff...
+  });
+  
+  //bad
+  var isVisible = ko.computed({
+  	read: function () {
+  		// ...stuff...
+  	},
+  	write: function () {
+  		// ...stuff...
+  	},
+  });
+  
+  // good
+  var isVisible = ko.computed(function readIsVisible () {
+  	// ...stuff...
+  });
+  
+  //good
+  var isVisible = ko.computed({
+  	read: function readIsVisible () {
+  		// ...stuff...
+  	},
+  	write: function writeIsVisible () {
+  		// ...stuff...
+  	},
+  });
+  ```
 
   - Never declare a function in a non-function block (`if`, `while`, etc). Assign the function to a variable instead. Browsers will allow you to do it, but they all interpret it differently.
 
@@ -1307,18 +1355,21 @@ This should all be covered by specific rules in this guide.  Most of these rules
     // bad
     (function() {
       	var name = 'Skywalker'
+      	
       	return name
     })()
 
     // good
     (function() {
       	var name = 'Skywalker';
+      	
       	return name;
     })();
 
     // good (guards against the function becoming an argument when two files with IIFEs are concatenated)
     ;(function() {
       	var name = 'Skywalker';
+      	
       	return name;
     })();
 	```
