@@ -171,6 +171,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
   		var _thisVM = this;
   	}
   }
+  ```
   
   - **Note:** We need a separate, standard name for this situation, but `_thisVM` can be inaccurate.  Other suggestions are appreciated.
 
@@ -179,7 +180,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	```javascript
 	function CollateralWidget() {
 		var _base = $.copyFunctions(Widget.call(this, name, parent, data));
-
+	
 		// ...logic...
 	}
 	```
