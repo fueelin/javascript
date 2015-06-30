@@ -27,6 +27,7 @@
   1. [Semicolons](#semicolons)
   1. [Comments](#comments)
   	1. [Regions](#regions)
+  1. [Abbreviations](#a	bbreviations)
   1. [Third Party](#third-party)
   	1. [jQuery](#jquery)
   	1. [Knockout](#knockout)
@@ -185,6 +186,18 @@ This should all be covered by specific rules in this guide.  Most of these rules
 		// ...logic...
 	}
 	```
+	
+  - Indicate factory functions with either the prefix `make` or the suffix `Factory`.
+  
+  ```javascript
+  	function makeGridRow(data) {
+  		return new GridRow(data);
+  	}
+  	
+  	this.scopeFactory = function scopeFactory (data) {
+  		return new Scope(data);
+  	};
+  ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1084,6 +1097,35 @@ This should all be covered by specific rules in this guide.  Most of these rules
     // good
     var items = [];
     ```
+    
+  - Use the `forEach` function to iterate over an array, unless the loop needs to call `break`.
+   
+  ```javascript
+  // bad
+  for(var i = 0; i < numbers.length; i++) {
+  	total += numbers[i];
+  }
+  
+  // good
+  numbers.forEach(function (number) {
+  	total += number;
+  });
+  ```
+  
+  - Use `for` ... `in` for loops that that need to call `break`.
+  
+  ```javascript
+  for(var i = 0; i < results.length; i++) {
+  	
+  	if(results[i] === 'error') {
+  		break;
+  	}
+  	
+  	successes++;
+  }
+  ```
+  
+  - Use `find` when searching an array for a single element and `filter` when searcing for multiple elements.
 
   - If you don't know array length use `Array.push`.
 
@@ -1373,6 +1415,60 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 ## Promises
 
+  - Always use promises for asynchronous code.
+   
+  ```javascript
+  // bad 
+  function renderWidgets(widgets) {
+  	_this.widgets(widgets);
+  	
+  	setInterval(function () {
+  		
+  		if(getRenderedWidgetCount() === widgets.length) {
+  			// ...stuff...
+  		}
+  	}, 100);
+  }
+  
+  // good
+  function renderWidgets(widgets) {
+  	var dfdRender = $.Deferred();
+  
+  	_this.widgets(widgets);
+  	
+  	setInterval(function () {
+  		
+  		if(getRenderedWidgetCount() === widgets.length) {
+  			dfdRender.resolve();
+  		}
+  	}, 100);
+  	
+  	return dfdRender.promise();
+  }
+  ```
+  
+  - Asynchronous functions must return promises, not deferreds, so they can control the resolution.
+   
+  ```javascript
+  // bad
+  function asyncOperation() {
+  	var dfdDone = $.Deferred();
+  	
+  	// ...stuff...
+  	
+  	return dfdDone;
+  }
+  
+  // good
+  function asyncOperation() {
+  	var dfdDone = $.Deferred();
+  	
+  	// ...stuff...
+  	
+  	return dfdDone.promise();
+  }
+  ```
+
   - Each function in a promise chain should by preceded by a newline.
 
 	```javascript
@@ -1396,6 +1492,56 @@ This should all be covered by specific rules in this guide.  Most of these rules
 			return data;
 		});
 	```
+	
+  - If one path returns a promise, all paths must return promises.
+   
+  ```javascript
+  // bad
+  function save(data) {
+  
+  	if(isValid) {
+  		return Service.save(data)
+  			.then(function (result) {
+  				return true;
+  			});
+  	}
+  	else {
+  		return false;
+  	}
+  }
+  
+  // good
+  function save(data) {
+  
+  	if(isValid) {
+  		return Service.save(data)
+  			.then(function (result) {
+  				return true;
+  			});
+  	}
+  	else {
+  		return $.Deferred().reject(false);
+  	}
+  }
+  ```
+  
+  - Use `when` to combine a fixed-length series of promises.
+   
+  ```javascript
+  function loading() {
+  	return $.when(loadLookups(lookups), loadModals(modals));
+  }
+  ```
+  
+  - Use `whenAll` to combine a varible-length array of promises.
+   
+  ```javascript
+  function loading() {
+  	var loadPromises = loadChildWidgets();
+  
+  	return $.whenAll(loadPromises);
+  }
+  ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1698,6 +1844,16 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
+## Abbreviations
+
+- The following domain-specific abbreviations are considered standard for use in property names, function names, etc:
+ 
+  + ws: Workspace
+  + scn: Scenario
+  + secDoc: Security Document
+  + dw: Data Wizard
+
+**[⬆ back to top](#table-of-contents)**
 
 ## Third Party 
 
