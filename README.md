@@ -6,6 +6,7 @@
 ## Table of Contents
   1. [Introduction](#introduction)
   1. [Naming Conventions](#naming-conventions)
+  1. [Line Length](#line-length) 
   1. [Modules](#modules)
   1. [Classes](#classes)
   1. [Class Structure](#class-structure)
@@ -201,6 +202,11 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
+## Line Length
+
+  - Lines of code should not exceed 135 columns in length.
+
+**[⬆ back to top](#table-of-contents)**
 
 ## Modules
 
@@ -1345,6 +1351,52 @@ This should all be covered by specific rules in this guide.  Most of these rules
 			&& !view.isReadOnly();
 	}
 	```
+	
+  - Never use multiline conditionals in `if` or `while` statements.  Instead, assign the result of the multiline conditional to an intermediary variable.
+   
+  ```javascript
+  // bad
+  function save() {
+  
+  	if(_this.hasLock 
+		&& _this.status !== 'readonly' 
+		&& !view.isReadOnly()) {
+		// ...stuff...	
+	}
+  }
+  
+  // good
+  function save() {
+  	
+  	var canSave = _this.hasLock 
+		&& _this.status !== 'readonly' 
+		&& !view.isReadOnly();
+		
+	if(canSave) {
+		// ...stuff...
+	}
+  }
+  ``` 
+  
+  - Use multiple lines for complex ternaries, starting each line with a ternary operator (`?` or `:`).
+   
+  ```javascript
+  // bad
+  function getCustomer(id) {
+  	
+  	return customerCache.hasCustomer(id) ?
+  		customerCache.getCustomer :
+  		customerService.getCustomer;
+  }
+  
+  // good
+  function getCustomer(id) {
+  	
+  	return customerCache.hasCustomer(id) 
+  		? customerCache.getCustomer 
+  		: customerService.getCustomer;
+  }
+  ```
 
 **[⬆ back to top](#table-of-contents)**
 
