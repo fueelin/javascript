@@ -93,7 +93,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
     }
     ```
 
-  - Use camelCase when naming objects, functions, and instances.
+  - Use camelCase when naming properties, enums, objects, functions, and instances.
 
     ```javascript
     // bad
@@ -1183,6 +1183,26 @@ This should all be covered by specific rules in this guide.  Most of these rules
   	this.screenCde = fpiEnums.screens.user;
   }
   ```
+  
+  - Enum values that share a name with a Javascript keyword must be defined and used via string property access.
+   
+  ```javascript
+  // bad
+  var dataOperations = {
+  	delete: 3,
+  };
+  
+  // good
+  var dataOperations = {
+  	'delete': 3,
+  };
+  
+  // bad
+  var isDelete = row.dataOperation == dataOperations.delete;
+  
+  // good
+  var isDelete = row.dataOperation == dataOperations['delete'];
+  ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1744,7 +1764,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
   - Use `on` to add event handlers - not `bind` or `live`. 
    
-  - Use `_this.UI` as the context when binding events for ViewModel types.  This prevents unintentionally overlapping handlers.
+  - Use `_this.UI` as the context when binding events for ViewModel types.  This prevents unintentionally overlapping handlers.  These handlers must be registered in the ViewModel's `loaded` function.
   
   ```javascript
   // bad
@@ -1764,6 +1784,9 @@ This should all be covered by specific rules in this guide.  Most of these rules
   	
   	_this.UI.on('click', 'button', someFunction);
   }
+  ```
+  
+  - **Note:** The exceptions to this are static event handlers, which are only required for events on widgets that appear in large numbers.
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1789,6 +1812,22 @@ This should all be covered by specific rules in this guide.  Most of these rules
 	```
 
   - **Note:** `ko.getFieldValue` is deprecated and should not be used. 
+  
+- Always pass an object as the argument when creating a computed observable instead of just a `read` function.  	This makes it easier to extend in the future.
+
+```javascript
+// bad
+var isVisible = ko.computed(function () {
+	// ...stuff...
+});
+
+// good
+var isVisible = ko.computed({
+	read: function () {
+	
+	},
+});
+```
 
 **[⬆ back to top](#table-of-contents)**
 
