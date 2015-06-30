@@ -8,6 +8,7 @@
   1. [Naming Conventions](#naming-conventions)
   1. [Modules](#modules)
   1. [Classes](#classes)
+  1. [Class Structure](#class-structure)
   1. [Functions](#functions)
   1. [Whitespace](#whitespace)
   1. [Variables](#variables)
@@ -337,6 +338,76 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 **[⬆ back to top](#table-of-contents)**
 
+## Class Structure
+
+  - ViewModel classes (widgets, views, etc.) should be organized into the following sections:
+  
+    + 1. **Base Class Settings** 
+      - Property overrides for base class.  
+      - Denoted by `####` comment.
+    + 2. **Properties**
+      - Public properties first, followed by private. 	
+      - Denoted by `####` comment.
+    + 3. **Event Model***
+      - Overrides of ViewModel lifecycle functions, plus their (exclusive) helpers.
+      - Enclosed in a region.
+    + 4. **Features**
+      - Functions, computed observables, and configs grouped by logical purpose.
+      - Enclosed in a region, with sub-regions for each feature.
+    + 5. **Nested Classes**
+      - Enclosed in a region.
+      
+  ```javascript 
+  function SearchWidget() {
+  	var _this = this;
+  	
+  	//#### Base Class Settings ####
+  	this.screenCde = fpiEnums.screens.search;
+  	
+  	//#### Properties ####
+  	this.customerName = ko.observable();
+  	
+  	var isDirty = ko.observable(false);
+  	
+  	//#region Event Model
+  	
+  	this.loading = function () {
+  		// ...stuff...
+  	}
+  	
+  	//#endregion
+  	
+  	//#region Features
+  	
+  	//#region Search
+  	
+  	var searchParams = ko.computed({
+  		// ...stuff...
+  	});
+  	
+  	this.runSearch = function () {
+  		// ...stuff...
+  	}
+  	
+  	//#endregion
+  	
+  	//#endregion
+  	
+  	//#region Nested Classes
+  	
+  	function SearchData() {
+  		// ...stuff...
+  	}
+  	
+  	//#endregion
+  }
+  ```
+  
+  - **Note:** Empty sections should be omitted.
+  
+  - Non-ViewModel classes use the same scheme, but omit the `Event Model` section.
+
+**[⬆ back to top](#table-of-contents)**
 
 ## Functions
 
