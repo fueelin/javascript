@@ -164,19 +164,17 @@ This should all be covered by specific rules in this guide.  Most of these rules
     }
     ```
     
-  - When saving a reference to `this` in a nested class, use `_thisVM`.
+  - When saving a reference to `this` in a nested class, use `__this`.
   
   ```javascript
   function Customer() {
   	var _this = this;
   	
   	function Address() {
-  		var _thisVM = this;
+  		var __this = this;
   	}
   }
   ```
-  
-  - **Note:** We need a separate, standard name for this situation, but `_thisVM` can be inaccurate.  Other suggestions are appreciated.
 
   - Save references to a base class as `_base`.
 
@@ -436,37 +434,23 @@ This should all be covered by specific rules in this guide.  Most of these rules
     // private function expression
     function named() {
     	return true;
-    };
+    }
 
 	// public anonymous function expression
 	this.getName = function () {
 		return 'test';
-	}
+	};
 
 	// public named function expression
 	this.getName = function getName() {
 		return 'test';
-	}
+	};
 
     // immediately-invoked function expression (IIFE)
     (function() {
     	console.log('Welcome to the Internet. Please follow me.');
     })();
     ```
-    
-  - Always use the 'public named function expression' when defining public functions.  This makes debugging much easier.
-   
-  ```javascript
-  // bad
-  _this.save = function (data) { 
-  	// ...stuff...
-  }
-  
-  // good
-  _this.save = function save (data) {
-  	// ...stuff...
-  }
-  ```
   
   - Naming promise callbacks is optional, but should be done for complex logic that may require debugging.
 
@@ -733,19 +717,6 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
 		return tooltipText;
 	}
-	```
-
-  - Use newlines for all method chains.
-
-	```javascript
-	// bad
-    $('#items').find('.selected').highlight().end();
-
-	// good
-    $('#items')
-		.find('.selected')
-		.highlight()
-		.end();
 	```
 
   - Use indentation when making long method chains.
@@ -1130,6 +1101,18 @@ This should all be covered by specific rules in this guide.  Most of these rules
   	successes++;
   }
   ```
+  
+  - Use reverse `for ... in` for loops that need to remove items.
+
+  ```javascript
+  for(var i = array.length - 1; i >= 0; i--) {
+                
+    if (array[i] === "b") {
+      array.splice(i, 1);
+    }
+  }
+  ```
+
   
   - Use `find` when searching an array for a single element and `filter` when searcing for multiple elements.
 
