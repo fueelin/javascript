@@ -422,7 +422,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
   
   - **Note:** Empty sections should be omitted.
   
-  - Non-ViewModel classes use the same scheme, but omit the `Event Model` section.
+  - Non-ViewModel classes use the same scheme, but omit the `Base Class Settings` and `Event Model` sections.
 
 **[⬆ back to top](#table-of-contents)**
 
