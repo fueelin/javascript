@@ -21,7 +21,7 @@
   1. [Enums](#enums)
   1. [Properties](#properties)
   1. [Conditional Expressions & Equality](#conditional-expressions--equality)
-  1. [Type Casting & Coercion](#type-casting--coercion)
+  1. [Type Inspection, Casting, & Coercion](#type-inspection-casting--coercion)
   1. [Promises](#promises)
   1. [Events](#events)
   1. [Commas](#commas)
@@ -1114,7 +1114,7 @@ This should all be covered by specific rules in this guide.  Most of these rules
   ```
 
   
-  - Use `find` when searching an array for a single element and `filter` when searcing for multiple elements.
+  - Use `find` when searching an array for a single element and `filter` or `filterBy` when searcing for multiple elements.
 
   - If you don't know array length use `Array.push`.
 
@@ -1384,7 +1384,9 @@ This should all be covered by specific rules in this guide.  Most of these rules
 **[⬆ back to top](#table-of-contents)**
 
 
-## Type Casting & Coercion
+## Type Inspection, Casting, & Coercion
+
+  - Use the `Object.is<Type>` functions for simple type inspection (e.g. `Object.isFunction`).
 
   - Perform type coercion at the beginning of the statement.
   
