@@ -2006,6 +2006,8 @@ This should all be covered by specific rules in this guide.  Most of these rules
 
   - **Note:** `ko.getFieldValue` is deprecated and should not be used. 
   
+- Use `ko.pureComputed` over `ko.computed` by default.  `ko.computed` should only be used when the `read` function has side effects, which is uncommon.
+
 - Always pass an object as the argument when creating a computed observable instead of just a `read` function.  	This makes it easier to extend in the future.
 
 ```javascript
