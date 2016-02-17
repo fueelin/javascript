@@ -32,6 +32,7 @@
   1. [Third Party](#third-party)
   	1. [jQuery](#jquery)
   	1. [Knockout](#knockout)
+  	2. [Require](#require)
   1. [Appendices](#appendices)
   	1. [Revision History](#revision-history)
   	1. [Resources](#resources)
@@ -2027,6 +2028,47 @@ var isVisible = ko.computed({
 **[⬆ back to top](#table-of-contents)**
 
 
+### Require
+
+  - Inline `require` calls cannot be used - dependencies must be defined at the top of a module.
+  
+	```javascript
+
+	// bad
+	define('CustomerWidget',
+		[],
+		function () {
+		
+			function CustomerWidget() {
+				var _this = this;
+				
+				function loadWidget() {
+					this.popover = require('Popover').makePopover();	
+				}
+			}
+		});
+	
+	//good
+	define('CustomerWidget',
+		['Popover'],
+		function (Popover) {
+		
+			function CustomerWidget() {
+				var _this = this;
+				
+				function loadWidget() {
+					this.popover = Popover.makePopover();	
+				}
+			}
+		});
+
+	```
+
+  - Modules must not reference other modules that they do not use.
+
+**[⬆ back to top](#table-of-contents)**
+
+
 ## Appendices
 
 ### Revision History
@@ -2034,6 +2076,7 @@ var isVisible = ko.computed({
 Date       | Modified By   | Version | Note
 ---------- | ------------- | ------- | ------------------------------
 11/17/2014 | Tim Beck      | 1.0     | Revisions from initial feedback.
+02/17/2016 | Tim Beck      | 1.1     | Updated for Sprint 1.
 
 ### Resources
 
